@@ -1,72 +1,88 @@
 <template>
-	<div class="container">
-		<div class="form-signin">
-			<h2 class="form-signin-heading">登录</h2>
-			<div class="login-wrap">
-				<input type="text" class="form-control uname" placeholder="用户名" v-model="userInfo.phone" autofocus/>
-				<input type="password" class="form-control psw" placeholder="密码" v-model="userInfo.password"/>
-				<button class="btn btn-lg btn-login btn-block" id="submit" @click="doLogin()">登录</button>
-			</div>
+	<div class="rnavbar">
+		<div class="panel-heading">
+			<el-breadcrumb separator=">">
+				<el-breadcrumb-item>红外码库管理</el-breadcrumb-item>
+				<el-breadcrumb-item>码库查询</el-breadcrumb-item>
+			</el-breadcrumb>
+		</div>
+		<div class="panel-body">
+			<el-table :data="tableData" stripe style="width: 100%">
+				<el-table-column prop="ircodeid" label="ID"  width="180"></el-table-column>
+				<el-table-column prop="devtypename" label="家电类型" width="180"></el-table-column>
+				<el-table-column prop="brand" label="中文品牌"></el-table-column>
+				<el-table-column prop="enbrand" label="英文品牌"></el-table-column>
+				<el-table-column prop="version" label="型号"></el-table-column>
+				<el-table-column prop="createtime" label="创建时间" sortable></el-table-column>
+				<el-table-column prop="author" label="创建人"></el-table-column>
+				<el-table-column prop="status" label="状态"></el-table-column>
+				<el-table-column label="操作">
+					<template scope="scope">
+						<el-button type="primary" size="mini">编辑</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+		</div>
+		<div class="panel-body block pull-right">
+			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+			</el-pagination>
 		</div>
 	</div>
 </template>
 
 <script>
-	import SHA1 from 'crypto-js/sha1'
-	import MD5 from 'crypto-js/md5'
-	import * as Cookies from 'js-cookie'
-
-	import API from '../config/api'
-	import key from '../config/key'
-
+	import API from '../../../config/api.js'
 
 	export default {
 		name: 'hello',
 		data () {
 			return {
-				userInfo: {
-					phone: '',
-					password: ''
-				},
-				timestamp: ''
+				tableData: [],
+				total: 0,
+				pageSizes: [10, 50, 100],
+				pageSize: 10,
+				currentPage: 1,
 			}
 		},
-		watch: {
-			// 监视timestamp，得到后再执行登录操作
-			timestamp(val) {
-				let postBody = {
-					'phone' : this.userInfo.phone,
-					'password' : SHA1(this.userInfo.password + key.password).toString()
-				};
-				let header = {
-					'timestamp': this.timestamp
-				};
-				API.login.login(postBody, header).then((data) => {
-					if (data.status == 0) {
-						Cookies.set('userName', data.nickname);
-						Cookies.set('ReqUserId', data.userid);
-						Cookies.set('ReqUserSession', data.loginsession);
-						this.$router.push('/ircodeManage');
-					} else {
-						this.$store.dispatch('newNotice', data.msg)
-					}
-				}, (data) => {
-					this.$store.dispatch('newNotice', data.msg)
-				})
-			} 
+		created() {
+			this.getInfrareList();
 		},
 		methods: {
-			// 获取timestamp
-			doLogin() {
-				API.login.getTimeStamp().then((data) => {
-					if (data.status == 0) {
-						this.timestamp = data.timestamp;
+			getInfrareList() {
+				//需要发送的body
+				let postBody = {
+					'ircodeid': 0,
+					'devtypeid': 0,
+					'brandid': 0,
+					'version': '',
+					'locateidList': [0, 0, 0],
+					'providerid': 0,
+					'status': '',
+					'starttime': '',
+					'endtime': '',
+					'index': (this.currentPage-1) * this.pageSize,
+					'step': 0
+				};
+				API.ircodeManage.getInfrareList(postBody).then((data) => {
+					if (data.error == 0) {
+						this.tableData = data.respbody.ircodeinfo;
+						this.total = data.respbody.count;
 					} else {
 						this.$store.dispatch('newNotice', data.msg)
 					}
 				}, (data) => {
 					this.$store.dispatch('newNotice', data.msg)
 				})
+			},
+			handleSizeChange(val) {
+				this.pageSize = val;
+				this.getInfrareList();
+				// console.log(`每页 ${val} 条`);
+			},
+			handleCurrentChange(val) {
+				this.currentPage = val;
+				this.getInfrareList();
+				// console.log(`当前页: ${val}`);
 			}
 		}
 	}
@@ -159,7 +175,7 @@
 		padding: 20px;
 	}
 
-	.login-social-link  {
+	.login-social-link	{
 		display: inline-block;
 		margin-top: 20px;
 		margin-bottom: 15px;

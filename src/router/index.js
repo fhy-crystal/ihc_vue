@@ -4,14 +4,35 @@ import Router from 'vue-router'
 // pages
 import Login from '@/pages/login'
 
+import ircodeManage from '@/pages/ircodeManage/infrared/index'
+import InfraredRepo from '@/pages/ircodeManage/infrared/infraredRepo'
+
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'Login',
-      component: Login
-    }
-  ]
+	routes: [
+		{
+			path: '',
+			redirect: '/login'
+		},{
+			path: '/',
+			redirect: '/login'
+		},{
+			path: '/login',
+			name: 'Login',
+			component: Login
+		},{
+			path: '/ircodeManage',
+			name: 'ircodeManage',
+			component: ircodeManage,
+			redirect: '/ircodeManage/list',
+			children: [
+				{
+					path: '/ircodeManage/list',
+					name: 'ircodeManageList',
+					component: InfraredRepo
+				}
+			]
+		}
+	]
 })

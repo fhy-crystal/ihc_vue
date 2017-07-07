@@ -20,7 +20,7 @@
 		// 	msg: state => state.msg
 		// }),
 		watch: {
-			show: (val) =>{
+			show: function(val) {
 				if (val) {
 					setTimeout(() =>{
 						this.$store.dispatch('closeNotice')
