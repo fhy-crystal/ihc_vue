@@ -8,8 +8,8 @@
 		</div>
 		<div class="panel-body">
 			<el-table :data="tableData" stripe style="width: 100%">
-				<el-table-column prop="ircodeid" label="ID"  width="180"></el-table-column>
-				<el-table-column prop="devtypename" label="家电类型" width="180"></el-table-column>
+				<el-table-column prop="ircodeid" label="ID"  width="80"></el-table-column>
+				<el-table-column prop="devtypename" label="家电类型"></el-table-column>
 				<el-table-column prop="brand" label="中文品牌"></el-table-column>
 				<el-table-column prop="enbrand" label="英文品牌"></el-table-column>
 				<el-table-column prop="version" label="型号"></el-table-column>
@@ -24,7 +24,7 @@
 			</el-table>
 		</div>
 		<div class="panel-body block pull-right">
-			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" layout="total, prev, pager, next, jumper" :total="total">
 			</el-pagination>
 		</div>
 	</div>
@@ -39,7 +39,7 @@
 			return {
 				tableData: [],
 				total: 0,
-				pageSizes: [10, 50, 100],
+				// pageSizes: [10, 50, 100],
 				pageSize: 10,
 				currentPage: 1,
 			}
@@ -77,7 +77,7 @@
 			handleSizeChange(val) {
 				this.pageSize = val;
 				this.getInfrareList();
-				// console.log(`每页 ${val} 条`);
+				console.log(`每页 ${val} 条`);
 			},
 			handleCurrentChange(val) {
 				this.currentPage = val;
