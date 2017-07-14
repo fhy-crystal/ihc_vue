@@ -45,9 +45,8 @@ body {
 	text-align: center;
 }
 .rnavbar{ 
-	display: block;
+	display: inline-block;
 	box-sizing:border-box;
-	float: right;
 	width: 87%;
 	min-width: 688px;
 	min-height: 1080px; 
