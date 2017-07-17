@@ -44,7 +44,7 @@
 					<el-col class="line" :span="2">-</el-col>
 					<el-col :span="11">
 						<el-form-item prop="endtime">
-							<el-date-picker :picker-options="notAfterTody" format="yyyy-MM-dd" type="date" placeholder="请选择结束时间" v-model="irocodeInfo.endtime" style="width: 100%;"></el-date-picker>
+							<el-date-picker :picker-options="notBeforeStart" format="yyyy-MM-dd" type="date" placeholder="请选择结束时间" v-model="irocodeInfo.endtime" style="width: 100%;"></el-date-picker>
 						</el-form-item>
 					</el-col>
 				</el-form-item>
@@ -126,7 +126,17 @@
 					statusList: [],
 					providerList: []
 				},
-				// 结束时间不早于开始时间
+				// 结束时间不早于开始时间,不晚于当前时间
+				notBeforeStart: {
+					// 修改为箭头函数，改变this指向
+					disabledDate: (time) => {
+						let starttime = this.irocodeInfo.starttime;
+						if (starttime) {
+							return time.getTime() <= starttime || time.getTime() > Date.now();
+						}
+					}
+				},
+				// 不晚于当前时间
 				notAfterTody: {
 					disabledDate(time) {
 						return time.getTime() > Date.now();
