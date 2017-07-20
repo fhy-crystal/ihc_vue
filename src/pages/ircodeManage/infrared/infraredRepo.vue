@@ -2,55 +2,55 @@
 	<div class="rnavbar">
 		<div class="panel-heading">
 			<el-breadcrumb separator=">">
-				<el-breadcrumb-item>红外码库管理</el-breadcrumb-item>
+				<el-breadcrumb-item :to="{path:'/ircodeManage/list'}">红外码库管理</el-breadcrumb-item>
 				<el-breadcrumb-item>码库查询</el-breadcrumb-item>
 			</el-breadcrumb>
 		</div>
 		<div class="panel-body">
 			<!-- 搜索条件 -->
-			<el-form :inline="true" ref="irocodeInfo" :rules="rules" :model="irocodeInfo" class="demo-form-inline">
+			<el-form :inline="true" ref="ircodeInfo" :rules="rules" :model="ircodeInfo" class="demo-form-inline">
 				<el-form-item prop="ircodeid">
-					<el-input type="number" v-model="irocodeInfo.ircodeid" placeholder="请输入红码ID"></el-input>
+					<el-input type="number" v-model="ircodeInfo.ircodeid" placeholder="请输入红码ID"></el-input>
 				</el-form-item>
 				<el-form-item prop="devtypeid">
-					<el-select v-model="irocodeInfo.devtypeid" placeholder="请选择家电类型" @change="selectDevId(irocodeInfo.devtypeid)">
+					<el-select v-model="ircodeInfo.devtypeid" placeholder="请选择家电类型" @change="selectDevId(ircodeInfo.devtypeid)">
 						<el-option v-for="item in searchKeys.devList" :label="item.devtypename" :key="item.devtypeid" :value="item.devtypeid"></el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item prop="brandid">
-					<el-select v-model="irocodeInfo.brandid" placeholder="请选择品牌">
+					<el-select v-model="ircodeInfo.brandid" placeholder="请选择品牌">
 						<el-option v-for="item in searchKeys.brandList" :label="item.brand" :key="item.brandid" :value="item.brandid"></el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item prop="providerid" v-show="this.irocodeInfo.devtypeid==2">
-					<el-select v-model="irocodeInfo.providerid" placeholder="请选择供应商">
+				<el-form-item prop="providerid" v-show="ircodeInfo.devtypeid==2">
+					<el-select v-model="ircodeInfo.providerid" placeholder="请选择供应商">
 						<el-option v-for="item in searchKeys.providerList" :label="item.providername" :key="item.providerid" :value="item.providerid"></el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item prop="version">
-					<el-input v-model="irocodeInfo.version" placeholder="请输入型号"></el-input>
+					<el-input v-model="ircodeInfo.version" placeholder="请输入型号"></el-input>
 				</el-form-item>
 				<el-form-item prop="status">
-				 	<el-select v-model="irocodeInfo.status" placeholder="请选择状态">
-				 		<el-option v-for="item in searchKeys.statusList" :label="item" :value="item" :key="item"></el-option>
-				 	</el-select>
+					<el-select v-model="ircodeInfo.status" placeholder="请选择状态">
+						<el-option v-for="item in searchKeys.statusList" :label="item" :value="item" :key="item"></el-option>
+					</el-select>
 				</el-form-item>
 				<el-form-item>
 					<el-col :span="11">
 						<el-form-item prop="starttime">
-							<el-date-picker :picker-options="notAfterTody" format="yyyy-MM-dd" type="date" placeholder="请选择开始时间" v-model="irocodeInfo.starttime" style="width: 100%;"></el-date-picker>
+							<el-date-picker :picker-options="notAfterTody" format="yyyy-MM-dd" type="date" placeholder="请选择开始时间" v-model="ircodeInfo.starttime" style="width: 100%;"></el-date-picker>
 						</el-form-item>
 					</el-col>
 					<el-col class="line" :span="2">-</el-col>
 					<el-col :span="11">
 						<el-form-item prop="endtime">
-							<el-date-picker :picker-options="notBeforeStart" format="yyyy-MM-dd" type="date" placeholder="请选择结束时间" v-model="irocodeInfo.endtime" style="width: 100%;"></el-date-picker>
+							<el-date-picker :picker-options="notBeforeStart" format="yyyy-MM-dd" type="date" placeholder="请选择结束时间" v-model="ircodeInfo.endtime" style="width: 100%;"></el-date-picker>
 						</el-form-item>
 					</el-col>
 				</el-form-item>
 				
 				<el-form-item>
-					<el-button @click="reset('irocodeInfo')">重置</el-button>
+					<el-button @click="reset('ircodeInfo')">重置</el-button>
 					<el-button type="primary" @click="search">查询</el-button>
 				</el-form-item>
 			</el-form>
@@ -68,7 +68,7 @@
 				<el-table-column prop="status" label="状态"></el-table-column>
 				<el-table-column label="操作">
 					<template scope="scope">
-						<el-button type="primary" size="mini">编辑</el-button>
+						<router-link :to="{name:'ircodeManageDetail', query:{'id':scope.row.ircodeid}}">编辑</router-link>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -94,7 +94,7 @@
 				pageSizes: [10, 20, 50, 100],
 				pageSize: 10,
 				currentPage: 1,
-				irocodeInfo: {
+				ircodeInfo: {
 					ircodeid: '',
 					devtypeid: '',
 					brandid: '',
@@ -130,7 +130,7 @@
 				notBeforeStart: {
 					// 修改为箭头函数，改变this指向
 					disabledDate: (time) => {
-						let starttime = this.irocodeInfo.starttime;
+						let starttime = this.ircodeInfo.starttime;
 						if (starttime) {
 							return time.getTime() <= starttime || time.getTime() > Date.now();
 						}
@@ -158,13 +158,13 @@
 				this.formatTime();
 				//需要发送的body
 				let postBody = {
-					'ircodeid': commonMethod.toZero(this.irocodeInfo.ircodeid),
-					'devtypeid': commonMethod.toZero(this.irocodeInfo.devtypeid),
-					'brandid': commonMethod.toZero(this.irocodeInfo.brandid),
-					'version': this.irocodeInfo.version,
+					'ircodeid': commonMethod.toZero(this.ircodeInfo.ircodeid),
+					'devtypeid': commonMethod.toZero(this.ircodeInfo.devtypeid),
+					'brandid': commonMethod.toZero(this.ircodeInfo.brandid),
+					'version': this.ircodeInfo.version,
 					'locateidList': [0, 0, 0],
-					'providerid': commonMethod.toZero(this.irocodeInfo.providerid),
-					'status': this.irocodeInfo.status,
+					'providerid': commonMethod.toZero(this.ircodeInfo.providerid),
+					'status': this.ircodeInfo.status,
 					'starttime': this.starttime,
 					'endtime': this.endtime,
 					'index': (this.currentPage-1) * this.pageSize,
@@ -260,7 +260,7 @@
 			},
 			// 选择家电类型后触发品牌查询
 			selectDevId(val) {
-				this.irocodeInfo.brandid = '';
+				this.ircodeInfo.brandid = '';
 				this.searchKeys.brandList = [];
 				if (val) {
 					this.getBrandList(val);
@@ -268,11 +268,11 @@
 			},
 			// 根据接口格式化时间
 			formatTime() {
-				if (this.irocodeInfo.starttime) {
-					this.starttime = commonMethod.formatTime(this.irocodeInfo.starttime.getTime()) + ' 00:00:00';
+				if (this.ircodeInfo.starttime) {
+					this.starttime = commonMethod.formatTime(this.ircodeInfo.starttime.getTime()) + ' 00:00:00';
 				}
-				if (this.irocodeInfo.endtime) {
-					this.endtime = commonMethod.formatTime(this.irocodeInfo.endtime.getTime()) + ' 23:59:59'
+				if (this.ircodeInfo.endtime) {
+					this.endtime = commonMethod.formatTime(this.ircodeInfo.endtime.getTime()) + ' 23:59:59'
 				}
 			}
 		}

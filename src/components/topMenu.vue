@@ -29,7 +29,12 @@
 		},
 		computed:{
 			nickname() {
-				return Cookies.get('userName');
+				let userName = Cookies.get('userName')
+				if (userName) {
+					return userName;
+				} else {
+					this.logout();
+				}
 			}
 		},
 		methods:{

@@ -5,6 +5,8 @@
 		<strong>提示：</strong>
 		<p>{{msg}}</p>
 	</div>
+	<!-- <el-alert title="提示：" type="error" :description="msg" show-icon>
+	</el-alert> -->
 </template>
 
 <script>
@@ -49,18 +51,18 @@
 	  position: fixed;
 	  top: 5px;
 	  margin: 0 auto;
-	  left:0;
-	  right:0;
-	  width:400px;
+	  left: 0;
+	  right: 0;
+	  width: 400px;
 	  z-index: 999999;
-	  background-color:#f2dede;
-	  color:#f34b3f;
+	  background-color: #f2dede;
+	  color: #f34b3f;
 	  border-radius: 4px;
-	  border-color:#ebccd1;
+	  border-color: #ebccd1;
 	}
 	.alert-icon-float-left{
-		font-size:32px;
-		float:left;
-		margin-right:5px;
+		font-size: 32px;
+		float: left;
+		margin-right: 5px;
 	}
 </style>

@@ -6,6 +6,7 @@ import Login from '@/pages/login'
 
 import ircodeManage from '@/pages/ircodeManage/infrared/index'
 import InfraredRepo from '@/pages/ircodeManage/infrared/infraredRepo'
+import InfraredDetail from '@/pages/ircodeManage/infrared/InfraredDetail'
 
 Vue.use(Router)
 
@@ -31,6 +32,11 @@ export default new Router({
 					path: '/ircodeManage/list',
 					name: 'ircodeManageList',
 					component: InfraredRepo
+				},
+				{
+					path: '/ircodeManage/Detail',
+					name: 'ircodeManageDetail',
+					component: InfraredDetail
 				}
 			]
 		}

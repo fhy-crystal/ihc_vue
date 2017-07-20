@@ -9,7 +9,8 @@ function resolve (dir) {
 
 module.exports = {
   entry: {
-    app: './src/main.js'
+    // app: './src/main.js'
+    app: ["babel-polyfill", "./src/main.js"] // 解决IE报vuex requires a Promise polyfill in this browser问题
   },
   output: {
     path: config.build.assetsRoot,

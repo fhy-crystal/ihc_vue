@@ -109,4 +109,7 @@ select.simulate{
 .el-table .warning-row{
 	background-color:#f9c855;
 }
+.el-select {
+	width: 100%;
+}
 </style>
