@@ -90,7 +90,7 @@
 		margin: 0;
 		padding:20px 15px;
 		text-align: center;
-		background: #41cac0;
+		background: #20a0ff;
 		border-radius: 5px 5px 0 0;
 		-webkit-border-radius: 5px 5px 0 0;
 		color: #fff;
@@ -100,15 +100,6 @@
 		font-family: 'Open Sans', sans-serif;
 	}
 
-	.form-signin .checkbox {
-		margin-bottom: 14px;
-	}
-	.form-signin .checkbox {
-		font-weight: normal;
-		color: #b6b6b6;
-		font-weight: 300;
-		font-family: 'Open Sans', sans-serif;
-	}
 	.form-signin .form-control {
 		position: relative;
 		font-size: 16px;
@@ -131,65 +122,16 @@
 	}
 
 	.form-signin .btn-login {
-		background: #f67a6e;
+		background: #20A0FF;
 		color: #fff;
 		text-transform: uppercase;
 		font-weight: 300;
 		font-family: 'Open Sans', sans-serif;
-		box-shadow: 0 4px #e56b60;
+		box-shadow: 0 4px #1D8CE0;
 		margin-bottom: 20px;
-	}
-
-	.form-signin p {
-		text-align: center;
-		color: #b6b6b6;
-		font-size: 16px;
-		font-weight: 300;
-	}
-
-	.form-signin a {
-		color: #41cac0;
-	}
-
-	.form-signin a:hover {
-		color: #b6b6b6;
 	}
 
 	.login-wrap {
 		padding: 20px;
-	}
-
-	.login-social-link  {
-		display: inline-block;
-		margin-top: 20px;
-		margin-bottom: 15px;
-	}
-
-	.login-social-link a {
-		color: #fff;
-		padding: 15px 28px;
-		border-radius: 4px;
-	}
-
-	.login-social-link a:hover {
-		color: #fff;
-	}
-
-	.login-social-link a i {
-		font-size: 20px;
-		padding-right: 10px;
-	}
-
-	.login-social-link a.facebook {
-		background: #5193ea;
-		margin-right: 22px;
-		box-shadow: 0 4px #2775e2;
-		float:left;
-	}
-
-	.login-social-link a.twitter {
-		background: #44ccfe;
-		box-shadow: 0 4px #2bb4e8;
-		float:left;
 	}
 </style>
