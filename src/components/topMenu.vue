@@ -65,6 +65,7 @@
 	.top img{
 		margin: 0 10px;
 		padding: 8px;
+		width: 109px;
 	}
 	.top h3{
 		display: inline-block;

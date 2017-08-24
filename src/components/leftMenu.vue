@@ -1,9 +1,8 @@
 <template>
 	<div class="lnavbar clearfix">
 		<ul class="list-unstyled listactive">
-			<li>{{menuInfo.name}}</li>
 			<li>
-				<router-link :to="menu.path" v-for="menu in menuInfo.list" key="menu.path">{{menu.name}}</router-link>
+				<router-link :to="menu.path" v-for="menu in menuInfo.ircodeList" key="menu.path">{{menu.name}}</router-link>
 			</li>
 		</ul>
 	</div>
@@ -39,12 +38,12 @@
 		padding-left: 30px ;
 		text-align: left;
 	}
-	.lnavbar > ul > li:first-child{
+	/*.lnavbar > ul > li:first-child{
 		margin-bottom: 10px;
 		border-bottom: 1px solid #dedee1;
 		font-weight: bold;
 		font-size: 15px;
-	}
+	}*/
 	.lnavbar ul > li > a{
 		color: #333333;
 		display: block;

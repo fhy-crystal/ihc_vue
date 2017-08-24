@@ -2,7 +2,7 @@ export default {
 	top: [
 		{
 			name: "码库/电视频道",
-			path: "/ircodeManage"
+			path: "/ircodeTvManage"
 		},{
 			name: "数据统计",
 			path: "/dataManage"
@@ -22,17 +22,29 @@ export default {
 	],
 
 	ircodeManage: {
-		name: "红外码库管理",
-		list:[
+		subMenu: [{
+			name: "红外码库管理",
+			path:"/ircodeTvManage/ircodeManage"
+		},{
+			name: "用户码库",
+			path:"/ircodeTvManage/userRepo"
+		},{
+			name: "电视频道管理",
+			path:"/ircodeTvManage/tvManage"
+		},{
+			name: "设置",
+			path:"/ircodeTvManage/setting"
+		}],
+		ircodeList:[
 		{
 			name: "码库查询",
-			path:"/ircodeManage/list"
+			path:"/ircodeTvManage/ircodeManage/list"
 		},{
 			name: "新增码",
-			path:"/ircodeManage/add"
+			path:"/ircodeTvManage/ircodeManage/add"
 		},{
 			name: "license管理",
-			path:"/ircodeManage/license"
+			path:"/ircodeTvManage/ircodeManage/license"
 		}]
 	}
 }

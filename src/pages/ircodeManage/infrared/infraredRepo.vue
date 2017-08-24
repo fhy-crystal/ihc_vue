@@ -2,7 +2,7 @@
 	<div class="rnavbar">
 		<div class="panel-heading">
 			<el-breadcrumb separator=">">
-				<el-breadcrumb-item :to="{path:'/ircodeManage/list'}">红外码库管理</el-breadcrumb-item>
+				<!-- <el-breadcrumb-item :to="{path:'/ircodeManage/list'}">红外码库管理</el-breadcrumb-item> -->
 				<el-breadcrumb-item>码库查询</el-breadcrumb-item>
 			</el-breadcrumb>
 		</div>
@@ -58,6 +58,7 @@
 			
 			<!-- 表格 -->
 			<el-table :data="tableData" stripe style="width: 100%">
+				<el-table-column type="index" label="序号" width="100"></el-table-column>
 				<el-table-column prop="ircodeid" label="ID" width="80"></el-table-column>
 				<el-table-column prop="devtypename" label="家电类型"></el-table-column>
 				<el-table-column prop="brand" label="中文品牌"></el-table-column>
@@ -102,7 +103,6 @@
 					version: '',
 					endtime: '',
 					locateidList: [0, 0, 0],
-					providerid: '',
 					starttime: '',
 					status: '',
 				},
@@ -115,7 +115,6 @@
 					providerid: '',
 					version: '',
 					endtime: '',
-					providerid: '',
 					starttime: '',
 					status: '',
 				},

@@ -2,60 +2,51 @@
 	<div class="rnavbar">
 		<div class="panel-heading">
 			<el-breadcrumb separator=">">
-				<!-- <el-breadcrumb-item :to="{path:'/ircodeManage/list'}">红外码库管理</el-breadcrumb-item> -->
-				<el-breadcrumb-item :to="{path:'/ircodeTvManage/ircodeManage/list'}">码库查询</el-breadcrumb-item>
-				<el-breadcrumb-item>详情</el-breadcrumb-item>
+				<!-- <el-breadcrumb-item :to="{path:'/ircodeTvManage/ircodeManage/list'}">红外码库管理</el-breadcrumb-item> -->
+				<el-breadcrumb-item>添加红码</el-breadcrumb-item>
 			</el-breadcrumb>
 		</div>
 		<div class="panel-body">
 			<el-row>
 				<el-col :span="12">
-					<el-form label-position="top" ref="ircodeInfo" :model="ircodeInfo" label-width="120px">
-						<el-form-item label="红码ID">
-							<el-input type="number" v-model="ircodeInfo.ircodeid" disabled></el-input>
-						</el-form-item>
-						<el-form-item label="家电类型">
+					<el-form label-position="top" ref="ircodeInfo" :rules="rules" :model="ircodeInfo" label-width="120px">
+						<el-form-item label="家电类型" prop="devtypeid">
 							<el-select v-model="ircodeInfo.devtypeid" placeholder="请选择家电类型" @change="selectDevId(ircodeInfo.devtypeid)">
 								<el-option v-for="item in allList.devList" :label="item.devtypename" :key="item.devtypeid" :value="item.devtypeid"></el-option>
 							</el-select>
 						</el-form-item>
-						<el-form-item label="品牌">
+						<el-form-item label="品牌" prop="brandid">
 							<el-select v-model="ircodeInfo.brandid" placeholder="请选择品牌" @change="selectBrandId(ircodeInfo.brandid)">
 								<el-option v-for="item in allList.brandList" :label="item.brand" :key="item.brandid" :value="item.brandid"></el-option>
 							</el-select>
 						</el-form-item>
-						<el-form-item label="型号">
+						<el-form-item label="型号" prop="versionid">
 							<el-select v-model="ircodeInfo.versionid" placeholder="请选择型号">
 								<el-option v-for="item in allList.versionList" :label="item.version" :key="item.versionid" :value="item.versionid"></el-option>
 							</el-select>
 						</el-form-item>
-						<el-form-item label="供应商" v-show="ircodeInfo.devtypeid==2">
+						<el-form-item label="供应商" v-show="ircodeInfo.devtypeid==2" prop="providerid">
 							<el-select v-model="ircodeInfo.providerid" placeholder="请选择供应商">
 								<el-option v-for="item in allList.providerList" :label="item.providername" :key="item.providerid" :value="item.providerid"></el-option>
 							</el-select>
 						</el-form-item>
-						<el-form-item label="状态">
+						<el-form-item label="状态" prop="status">
 							<el-select v-model="ircodeInfo.status" placeholder="请选择状态">
 								<el-option v-for="item in allList.statusList" :label="item" :value="item" :key="item"></el-option>
 							</el-select>
 						</el-form-item>
-						<el-form-item label="创建人">
-							<el-input v-model="ircodeInfo.author" disabled></el-input>
-						</el-form-item>
-						<el-form-item label="创建时间">
-							<el-input v-model="ircodeInfo.createtime" disabled></el-input>
-						</el-form-item>
 						<el-form-item label="添加红码文件">
-							<a :href="url + 'publicircode/v1/manage/getircodefile?ircodeid=' + ircodeInfo.ircodeid">{{ircodeInfo.ircodefile}}</a>
-							<br>
-							<el-button @click="uploadIrcode">
-								<span v-show="!ircodeInfo.ircodefile">点击上传</span>
-								<span v-show="ircodeInfo.ircodefile">重新上传</span>
-							</el-button>
-							<input type="file" id="link" style="display:none" @change="uploadMethod">
+							<template scope='scope'>
+								{{ircodeInfo.filename}}
+								<br>
+								<el-button @click="uploadIrcode">
+									<span>点击上传</span>
+								</el-button>
+								<input type="file" id="link" style="display:none" @change="selectFile">
+							</template>
 						</el-form-item>
 						<el-form-item>
-							<el-button class="pull-right" type="primary" @click="save">保存</el-button>
+							<el-button class="pull-right" type="primary" @click="save('ircodeInfo')">保存</el-button>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -67,7 +58,7 @@
 				文件列表
 				<!-- 删除提示框 -->
 				<el-popover ref="popover" placement="top" width="300" v-model="delDialog">
-					<p>确定需要删除吗？</p>
+					<p>这是一段内容这是一段内容确定删除吗？</p>
 					<div style="text-align: right; margin: 0">
 						<el-button size="mini" type="text" @click="delDialog=false">取消</el-button>
 						<el-button type="danger" size="mini" @click="confirmDel">确定</el-button>
@@ -126,6 +117,13 @@
 					callback();
 				}
 			};
+			let checkfile = function(rule, value, callback) {
+				if (this.ircodeInfo.filename === '') {
+					callback(new Error('请上传文件'));
+				} else {
+					callback();
+				}
+			};
 			return {
 				url: urls.httpUrl,
 				ircodeInfo: {
@@ -134,12 +132,28 @@
 					brandid: '',
 					providerid: '',
 					version: '',
-					endtime: '',
-					locateidList: [0, 0, 0],
-					starttime: '',
 					status: '',
+					fileObj: '',
 					filename: '',
 					funcfile: []
+				},
+				rules: {
+					devtypeid: [{
+						required: true, 
+						message: '请选择家电类型'
+					}],
+					brandid: '',
+					version: '',
+					providerid: '',
+					status: [{
+						required: true, 
+						message: '请选择状态'
+					}],
+					file: [{
+						required: true,
+						validator: checkfile,
+						trigger: 'blur'
+					}]
 				},
 				// 各个列表
 				allList: {
@@ -168,55 +182,49 @@
 		created() {
 			// 获取家电类型列表
 			this.getDevList();
-			// 获取红码详情
-			this.getInfrareDetail();
 			// 获取状态列表
 			this.getStatusList();
 		},
 		methods: {
-			// 获取红码详情
-			getInfrareDetail() {
-				let postBody = {
-					'ircodeid': parseInt(this.$route.query.id)
-				};
-				API.ircodeManage.getIrcodeDetail(postBody).then((data) => {
-					if (data.error == 0) {
-						this.ircodeInfo = data.respbody.ircodeinfo;
-						this.devtypeid = data.respbody.ircodeinfo.devtypeid;
-					} else {
-						this.$store.dispatch('newNotice', data.msg)
-					}
-				}, (data) => {
-					this.$store.dispatch('newNotice', data.msg)
-				})
-			},
 			// 保存
-			save() {
-				var postBody = {
-					'ircodeid': this.ircodeInfo.ircodeid,
-					'devtypeid': this.ircodeInfo.devtypeid,
-					'brandid': this.ircodeInfo.brandid,
-					'versionid': this.ircodeInfo.versionid,
-					'providerid': this.ircodeInfo.providerid,
-					'status': this.ircodeInfo.status,
-				};
-
-				API.ircodeManage.updateIrcode(postBody).then((data) => {
-					if (data.error == 0) {
-						this.$message({
-							'message': '保存成功',
-							'type':'success'
-						});
-					} else {
-						this.$store.dispatch('newNotice', data.msg)
+			save(formName) {
+				this.$refs[formName].validate((valid) => {
+					if (valid) {
+						var postBody = {
+							'devtypeid': this.ircodeInfo.devtypeid,
+							'brandid': this.ircodeInfo.brandid,
+							'versionid': this.ircodeInfo.versionid,
+							'providerid': commonMethod.toZero(this.ircodeInfo.providerid),
+							'status': this.ircodeInfo.status,
+						};
+						API.ircodeManage.addIrcode(postBody).then((data) => {
+							if (data.error == 0) {
+								this.ircodeInfo.ircodeid = data.respbody.ircodeid;
+								// 获取id后再上传文件
+								API.ircodeManage.uploadIrcode({file: this.ircodeInfo.fileObj}, {Ircodeid: this.ircodeInfo.ircodeid}).then((data) => {
+									if (data && data.error == 0) {
+										this.$message({
+											'message': '保存成功',
+											'type': 'success'
+										})
+									} else {
+										this.$store.dispatch('newNotice', data.msg)
+									}
+								}, (data) => {
+									this.$store.dispatch('newNotice', data)
+								})
+							} else {
+								this.$store.dispatch('newNotice', data.msg)
+							}
+						}, (data) => {
+							this.$store.dispatch('newNotice', data.msg)
+						})
 					}
-				}, (data) => {
-					this.$store.dispatch('newNotice', data.msg)
 				})
 			},
 			// 获取家电列表
 			getDevList() {
-				let postBody = {
+				let postBody={
 					'brandid': 0
 				};
 				API.ircodeManage.getDevList(postBody).then((data) => {
@@ -231,7 +239,7 @@
 			},
 			// 获取品牌列表
 			getBrandList(devId) {
-				let postBody = {
+				let postBody={
 					'devtypeid': devId
 				};
 				API.ircodeManage.getBrandList(postBody).then((data) => {
@@ -248,7 +256,7 @@
 			getProviderList() {
 				API.ircodeManage.getProviderList().then((data) => {
 					if (data.error == 0) {
-						this.allList.providerList = data.providerinfo;
+						this.allList.providerList=data.providerinfo;
 					} else {
 						this.$store.dispatch('newNotice', data.msg)
 					}
@@ -260,7 +268,7 @@
 			getStatusList() {
 				API.ircodeManage.getStatusList().then((data) => {
 					if (data.error == 0) {
-						this.allList.statusList = data.respbody.statuslist;
+						this.allList.statusList=data.respbody.statuslist;
 					} else {
 						this.$store.dispatch('newNotice', data.msg)
 					}
@@ -270,12 +278,12 @@
 			},
 			// 获取型号
 			getVersionList(brandid) {
-				let postBody = {
+				let postBody={
 					'brandid': brandid
 				};
 				API.ircodeManage.getVersionList(postBody).then((data) => {
 					if (data.error == 0) {
-						this.allList.versionList = data.respbody.version;
+						this.allList.versionList=data.respbody.version;
 					} else {
 						this.$store.dispatch('newNotice', data.msg)
 					}
@@ -285,37 +293,27 @@
 			},
 			// 选择家电类型后触发品牌查询
 			selectDevId(val) {
-				this.allList.brandList = [];
+				this.allList.brandList=[];
 				if (val) {
 					this.getBrandList(val);
 				}
-				// this.ircodeInfo.brandid='';
 			},
 			// 选择品牌后触发型号查询
 			selectBrandId(val) {
-				this.allList.versionList = [];
+				this.allList.versionList=[];
 				if (val) {
 					this.getVersionList(val);
 				}
-				// this.ircodeInfo.brandid='';
 			},
 			// 点击上传ircode
 			uploadIrcode() {
 				document.getElementById('link').click();
+				
 			},
-			// 上传
-			uploadMethod() {
-				let fileObj = commonMethod.getFileObjAndSize(document.getElementById('link'));
-				API.ircodeManage.uploadIrcode({file: fileObj}, {Ircodeid: this.ircodeInfo.ircodeid}).then((data) => {
-					if (data && data.error == 0) {
-						this.ircodeInfo.ircodefile = fileObj.name;
-						this.getInfrareDetail();
-					} else {
-						this.$store.dispatch('newNotice', data.msg)
-					}
-				}, (data) => {
-					this.$store.dispatch('newNotice', data)
-				})
+			// 选择完文件
+			selectFile() {
+				this.ircodeInfo.fileObj = commonMethod.getFileObjAndSize(document.getElementById('link'));
+				this.ircodeInfo.filename = this.ircodeInfo.fileObj.name;
 			},
 			// 点击添加文件
 			uploadFile(formName) {
@@ -337,7 +335,6 @@
 				};
 				API.ircodeManage.uploadIrcodeFile(postBody).then((data) => {
 					if (data && data.error == 0) {
-						this.getInfrareDetail();
 						this.addFileDialog = false;
 					} else {
 						this.$store.dispatch('newNotice', data.msg);

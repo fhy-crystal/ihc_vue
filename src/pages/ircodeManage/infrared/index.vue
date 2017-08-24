@@ -1,12 +1,12 @@
 <template>
-  	<div class="content clearfix">
+	<div class="content clearfix">
 		<left-menu></left-menu>
 		<router-view></router-view>
-  	</div>
+	</div>
 </template>
 
 <script>
-  	import LeftMenu from '../../../components/leftMenu.vue'
+	import LeftMenu from '../../../components/leftMenu.vue'
 	import configMenu from '../../../config/menu'
 
 	export default {
@@ -22,7 +22,7 @@
 	}
 </script>
 
-<style type="text/css">
+<style type="text/css" scope>
 	.pull-right>.form-control{
 		display: inline-block;
 		width:400px;

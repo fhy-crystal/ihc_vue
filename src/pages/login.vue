@@ -46,7 +46,7 @@
 						Cookies.set('userName', data.nickname);
 						Cookies.set('ReqUserId', data.userid);
 						Cookies.set('ReqUserSession', data.loginsession);
-						this.$router.push('/ircodeManage');
+						this.$router.push('/ircodeTvManage/ircodeManage');
 					} else {
 						this.$store.dispatch('newNotice', data.msg)
 					}

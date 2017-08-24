@@ -32,6 +32,9 @@ export default {
 			// return ajaxMethod.post(url)
 			let url = 'publicircode/v1/manage/delfuncfile';
 			return ajaxMethod.formPost(url, params)
-		}
+		},
+		addIrcode: (params) => (ajaxMethod.post('publicircode/v1/manage/addirdata', params)),
+		getLicenseList: (params) => (ajaxMethod.post('publicircode/v1/manage/licenselimitinfo', params)),
+		licenseManage: (params) => (ajaxMethod.post('publicircode/v1/manage/licenselimit', params)),
 	}
 }
